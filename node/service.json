@@ -1,0 +1,13 @@
+{
+  "memory": 256,
+  "ttl": 10,
+  "timeout": 10,
+  "minReplicas": 2,
+  "maxReplicas": 4,
+  "routes": {
+    "setup": {
+      "path": "/_v/vtex.app-store-setup/setup",
+      "public": true
+    }
+  }
+}
