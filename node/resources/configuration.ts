@@ -4,4 +4,4 @@ export const storeInVbase = (ctx: Context) =>
     .then(_ => ctx.state.body)
 
 export const fetchConfiguration = (ctx: Context) =>
-  ctx.clients.vbase.getJSON('vtex.app-store-setup', 'configs')
+  ctx.clients.vbase.getJSON('vtex.app-store-setup', 'configs', true)
