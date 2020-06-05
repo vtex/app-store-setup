@@ -2,16 +2,21 @@ import { json } from 'co-body'
 
 import { setupPipe } from '../resources/setupPipe'
 
-export const setup = async (ctx: Context) => {
-  const { salesChannelMap } = await json(ctx.req)
+export async function setup(ctx: Context) {
+  const { salesChannels } = await json(ctx.req)
 
-  const state = await setupPipe({
-    ctx,
-    salesChannelMap,
-  })
+  ctx.state.body = {
+    salesChannelMap: salesChannels,
+  }
 
-  delete state.ctx
+  try {
+    const state = await setupPipe(ctx)
 
-  ctx.status = 200
-  ctx.body = state
+    ctx.status = 200
+    ctx.body = { ...state, ctx: undefined }
+  } catch (error) {
+    console.log(error)
+    ctx.status = 500
+    ctx.body = error
+  }
 }

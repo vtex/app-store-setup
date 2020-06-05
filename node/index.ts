@@ -1,9 +1,9 @@
 import {
   ClientsConfig,
+  ParamsContext,
+  RecorderState,
   Service,
   ServiceContext,
-  RecorderState,
-  ParamsContext,
 } from '@vtex/api'
 
 import { Clients } from './clients'
@@ -22,14 +22,10 @@ const clients: ClientsConfig<Clients> = {
 }
 
 declare global {
-  type Context = ServiceContext<Clients, State>
-
-  interface State extends RecorderState {
-    code: number
-  }
+  type Context = ServiceContext<Clients>
 }
 
-export default new Service<Clients, State, ParamsContext>({
+export default new Service<Clients, RecorderState, ParamsContext>({
   clients,
   routes: {
     setup,

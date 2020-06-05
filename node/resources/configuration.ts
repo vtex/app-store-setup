@@ -1,7 +1,4 @@
-export const storeInVbase = (state: SetupState) =>
-  state.ctx.clients.vbase
-    .saveJSON('vtex.app-store-setup', 'configs', {
-      ...state,
-      ctx: undefined,
-    })
-    .then(_ => state)
+export const storeInVbase = (ctx: Context) =>
+  ctx.clients.vbase
+    .saveJSON('vtex.app-store-setup', 'configs', ctx.state.body)
+    .then(_ => ctx.state.body)

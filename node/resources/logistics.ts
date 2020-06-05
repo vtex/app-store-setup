@@ -1,5 +1,7 @@
 import { toPairs } from 'ramda'
 
+import incrementState from '../utils/incrementState'
+
 const DEFAULT_CARRIER_PREFIX = 'Apps'
 
 const getLogisticsNaming = (currency: string, isId = false) => {
@@ -40,13 +42,13 @@ const getDefaultAddress = (currency: string) => {
   return DEFAULT_ADDRESSES[currency as keyof typeof DEFAULT_ADDRESSES]
 }
 
-export const setupCarriers = async (state: SetupState) => {
+export const setupCarriers = async (ctx: Context) => {
   const {
-    salesChannelMap,
-    ctx: {
-      clients: { logistics },
+    state: {
+      body: { salesChannelMap },
     },
-  } = state
+    clients: { logistics },
+  } = ctx
 
   const carriers = await Promise.all(
     Object.keys(salesChannelMap).map(currency =>
@@ -75,48 +77,43 @@ export const setupCarriers = async (state: SetupState) => {
     )
   )
 
-  return {
-    ...state,
-    carriers,
-  } as SetupState
+  return incrementState(ctx, { carriers })
 }
 
-export const setupDocks = async (state: SetupState) => {
+export const setupDocks = async (ctx: Context) => {
   const {
-    salesChannelMap,
-    ctx: {
-      clients: { logistics },
+    state: {
+      body: { salesChannelMap },
     },
-  } = state
+    clients: { logistics },
+  } = ctx
 
   const docks = await Promise.all(
-    toPairs(salesChannelMap).map(([currency, salesChannelId], index) =>
-      logistics
-        .createDock({
-          address: getDefaultAddress(currency),
-          freightTableIds: [getLogisticsNaming(currency)],
-          id: getLogisticsNaming(currency, true),
-          name: getLogisticsNaming(currency),
-          priority: index,
-          salesChannels: [salesChannelId],
-        })
-        .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
+    toPairs(salesChannelMap as Record<string, string>).map(
+      ([currency, salesChannelId], index) =>
+        logistics
+          .createDock({
+            address: getDefaultAddress(currency),
+            freightTableIds: [getLogisticsNaming(currency)],
+            id: getLogisticsNaming(currency, true),
+            name: getLogisticsNaming(currency),
+            priority: index,
+            salesChannels: [salesChannelId],
+          })
+          .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
     )
   )
 
-  return {
-    ...state,
-    docks,
-  } as SetupState
+  return incrementState(ctx, { docks })
 }
 
-export const setupWarehouses = async (state: SetupState) => {
+export const setupWarehouses = async (ctx: Context) => {
   const {
-    salesChannelMap,
-    ctx: {
-      clients: { logistics },
+    state: {
+      body: { salesChannelMap },
     },
-  } = state
+    clients: { logistics },
+  } = ctx
 
   const warehouses = await Promise.all(
     Object.keys(salesChannelMap).map(currency =>
@@ -129,9 +126,8 @@ export const setupWarehouses = async (state: SetupState) => {
         .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
     )
   )
+  console.log(warehouses)
+  console.log(ctx.state.body)
 
-  return {
-    ...state,
-    warehouses,
-  } as SetupState
+  return incrementState(ctx, { warehouses })
 }
