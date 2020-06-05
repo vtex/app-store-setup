@@ -129,7 +129,6 @@ export default class Logistics extends VtexCommerce {
     warehouseInput: WarehouseInput,
     tracingConfig?: RequestTracingConfig
   ) {
-    console.log(warehouseInput)
     const metric = 'logistics-createWarehouse'
     return this.http.post(routes.warehouses(), warehouseInput, {
       metric,

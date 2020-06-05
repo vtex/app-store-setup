@@ -8,6 +8,10 @@
     "setup": {
       "path": "/_v/vtex.app-store-setup/setup",
       "public": true
+    },
+    "configuration": {
+      "path": "/_v/vtex.app-store-setup/configuration",
+      "public": true
     }
   }
 }

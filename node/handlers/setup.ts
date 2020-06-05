@@ -15,7 +15,6 @@ export async function setup(ctx: Context) {
     ctx.status = 200
     ctx.body = { ...state, ctx: undefined }
   } catch (error) {
-    console.log(error)
     ctx.status = 500
     ctx.body = error
   }

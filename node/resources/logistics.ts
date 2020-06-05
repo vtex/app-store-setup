@@ -126,8 +126,6 @@ export const setupWarehouses = async (ctx: Context) => {
         .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
     )
   )
-  console.log(warehouses)
-  console.log(ctx.state.body)
 
   return incrementState(ctx, { warehouses })
 }

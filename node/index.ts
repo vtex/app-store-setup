@@ -7,6 +7,7 @@ import {
 } from '@vtex/api'
 
 import { Clients } from './clients'
+import { configuration } from './handlers/configuration'
 import { setup } from './handlers/setup'
 
 const TIMEOUT_MS = 10000
@@ -28,6 +29,7 @@ declare global {
 export default new Service<Clients, RecorderState, ParamsContext>({
   clients,
   routes: {
+    configuration,
     setup,
   },
 })
