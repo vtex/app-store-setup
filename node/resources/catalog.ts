@@ -1,14 +1,13 @@
 import { DEFAULT_SPECIFICATIONS } from '../utils/constants'
+import incrementState from '../utils/incrementState'
 
 const SPECIFICATION_GROUP_NAME = 'AppsSpecifications'
 
-export const createBrand = async (state: SetupState) => {
+export const createBrand = async (ctx: Context) => {
   const {
-    ctx: {
-      clients: { lm, catalog },
-      vtex: { account },
-    },
-  } = state
+    clients: { lm, catalog },
+    vtex: { account },
+  } = ctx
 
   const brandId = await catalog
     .createBrand({
@@ -20,18 +19,13 @@ export const createBrand = async (state: SetupState) => {
     })
     .then(({ Id }) => Id)
 
-  return {
-    ...state,
-    brandId,
-  } as SetupState
+  return incrementState(ctx, { brandId })
 }
 
-export const createCategory = async (state: SetupState) => {
+export const createCategory = async (ctx: Context) => {
   const {
-    ctx: {
-      clients: { catalog },
-    },
-  } = state
+    clients: { catalog },
+  } = ctx
 
   const categoryId = await catalog
     .createCategory({
@@ -47,19 +41,16 @@ export const createCategory = async (state: SetupState) => {
     })
     .then(({ Id }) => Id)
 
-  return {
-    ...state,
-    categoryId,
-  } as SetupState
+  return incrementState(ctx, { categoryId })
 }
 
-export const createSpecificationGroup = async (state: SetupState) => {
+export const createSpecificationGroup = async (ctx: Context) => {
   const {
-    ctx: {
-      clients: { catalog },
+    clients: { catalog },
+    state: {
+      body: { categoryId },
     },
-    categoryId,
-  } = state
+  } = ctx
 
   const { Id: specificationGroupId } = await catalog.createSpecificationGroup({
     CategoryId: categoryId as number,
@@ -67,20 +58,16 @@ export const createSpecificationGroup = async (state: SetupState) => {
     Position: 1,
   })
 
-  return {
-    ...state,
-    specificationGroupId,
-  } as SetupState
+  return incrementState(ctx, { specificationGroupId })
 }
 
-export const createSpecifications = async (state: SetupState) => {
+export const createSpecifications = async (ctx: Context) => {
   const {
-    ctx: {
-      clients: { catalog },
+    clients: { catalog },
+    state: {
+      body: { categoryId, specificationGroupId },
     },
-    categoryId,
-    specificationGroupId,
-  } = state
+  } = ctx
 
   const specifications = await Promise.all(
     DEFAULT_SPECIFICATIONS.map(specification =>
@@ -94,8 +81,5 @@ export const createSpecifications = async (state: SetupState) => {
     )
   )
 
-  return {
-    ...state,
-    specifications,
-  } as SetupState
+  return incrementState(ctx, { specifications })
 }

@@ -35,9 +35,9 @@ export default class Logistics extends VtexCommerce {
       maxDimension = {
         height: 0,
         length: 0,
+        maxSumDimension: 0,
         weight: 0,
         width: 0,
-        maxSumDimension: 0,
       },
       exclusiveToDeliveryPoints = false,
       minimunCubicWeight = 0,
@@ -129,6 +129,7 @@ export default class Logistics extends VtexCommerce {
     warehouseInput: WarehouseInput,
     tracingConfig?: RequestTracingConfig
   ) {
+    console.log(warehouseInput)
     const metric = 'logistics-createWarehouse'
     return this.http.post(routes.warehouses(), warehouseInput, {
       metric,

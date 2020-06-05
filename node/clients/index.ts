@@ -1,8 +1,8 @@
 import { IOClients } from '@vtex/api'
 
 import Catalog from './catalog'
-import Logistics from './logistics'
 import LicenseManager from './licensemanager'
+import Logistics from './logistics'
 
 export class Clients extends IOClients {
   public get catalog() {
