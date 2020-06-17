@@ -14,10 +14,14 @@ export async function setup(ctx: Context) {
         : 'USD',
     })),
   }
-  const {
-    state: { body: state },
-  } = await setupPipe(ctx)
+
+  setupPipe(ctx).catch(error =>
+    ctx.vtex.logger.error({
+      data: error.stack,
+      type: 'setup-failed',
+    })
+  )
 
   ctx.status = 200
-  ctx.body = { ...state, ctx: undefined }
+  ctx.body = 'Setup started'
 }
