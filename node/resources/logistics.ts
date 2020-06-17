@@ -1,5 +1,3 @@
-import { toPairs } from 'ramda'
-
 import incrementState from '../utils/incrementState'
 
 const DEFAULT_CARRIER_PREFIX = 'Apps'
