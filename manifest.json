@@ -7,6 +7,10 @@
   "mustUpdateAt": "2018-01-04",
   "categories": [],
   "dependencies": {},
+  "billingOptions": {
+    "free": true,
+    "termsURL": "https://url.to.the/terms"
+  },
   "builders": {
     "node": "6.x",
     "docs": "0.x",
