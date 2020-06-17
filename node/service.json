@@ -6,8 +6,28 @@
   "maxReplicas": 4,
   "routes": {
     "setup": {
-      "path": "/_v/vtex.app-store-setup/setup",
-      "public": true
+      "path": "/setup",
+      "public": false,
+      "policies": [
+        {
+          "effect": "allow",
+          "actions": [
+            "post"
+          ],
+          "principals": [
+            "vrn:apps:*:{{account}}:{{workspace}}:app/vtex.channels-setup@*"
+          ]
+        },
+        {
+          "effect": "allow",
+          "actions": [
+            "post"
+          ],
+          "principals": [
+            "vrn:vtex.vtex-id:*:{{account}}:*:user/*@vtex.com.br"
+          ]
+        }
+      ]
     },
     "configuration": {
       "path": "/_v/vtex.app-store-setup/configuration",
