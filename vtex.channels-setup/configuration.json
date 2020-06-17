@@ -1,0 +1,24 @@
+{
+  "name": "VTEX App Store",
+  "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/VTEX_Logo.svg/1200px-VTEX_Logo.svg.png",
+  "salesChannels": [
+    {
+      "id": 1,
+      "name": "Brazilian policy",
+      "description": "Subscribe in this channel to be able to sell in the Brazilian App Store with BRL currency.",
+      "commissioning": {
+        "product": 25
+      },
+      "payment": "marketplace"
+    },
+    {
+      "id": 2,
+      "name": "Global policy",
+      "description": "Subscribe in this channel to be able to sell in the global App Store with USD currency.",
+      "commissioning": {
+        "product": 25
+      },
+      "payment": "marketplace"
+    }
+  ]
+}

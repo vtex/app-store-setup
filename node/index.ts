@@ -23,7 +23,14 @@ const clients: ClientsConfig<Clients> = {
 }
 
 declare global {
-  type Context = ServiceContext<Clients>
+  interface State extends RecorderState {
+    body: {
+      salesChannels?: SalesChannelState[]
+      categoryId?: number
+      specificationGroupId?: number
+    }
+  }
+  type Context = ServiceContext<Clients, State>
 }
 
 export default new Service<Clients, RecorderState, ParamsContext>({

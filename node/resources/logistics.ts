@@ -45,13 +45,13 @@ const getDefaultAddress = (currency: string) => {
 export const setupCarriers = async (ctx: Context) => {
   const {
     state: {
-      body: { salesChannelMap },
+      body: { salesChannels },
     },
     clients: { logistics },
   } = ctx
 
   const carriers = await Promise.all(
-    Object.keys(salesChannelMap).map(currency =>
+    salesChannels?.map(({ currency }) =>
       logistics
         .createCarrier({
           freightValue: [
@@ -74,7 +74,7 @@ export const setupCarriers = async (ctx: Context) => {
           slaType: getLogisticsNaming(currency),
         })
         .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
-    )
+    ) ?? []
   )
 
   return incrementState(ctx, { carriers })
@@ -83,14 +83,14 @@ export const setupCarriers = async (ctx: Context) => {
 export const setupDocks = async (ctx: Context) => {
   const {
     state: {
-      body: { salesChannelMap },
+      body: { salesChannels },
     },
     clients: { logistics },
   } = ctx
 
   const docks = await Promise.all(
-    toPairs(salesChannelMap as Record<string, string>).map(
-      ([currency, salesChannelId], index) =>
+    salesChannels?.map(
+      ({ currency, seller: salesChannelId }: SalesChannelState, index: any) =>
         logistics
           .createDock({
             address: getDefaultAddress(currency),
@@ -98,10 +98,10 @@ export const setupDocks = async (ctx: Context) => {
             id: getLogisticsNaming(currency, true),
             name: getLogisticsNaming(currency),
             priority: index,
-            salesChannels: [salesChannelId],
+            salesChannels: [salesChannelId.toString()],
           })
           .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
-    )
+    ) ?? []
   )
 
   return incrementState(ctx, { docks })
@@ -110,13 +110,13 @@ export const setupDocks = async (ctx: Context) => {
 export const setupWarehouses = async (ctx: Context) => {
   const {
     state: {
-      body: { salesChannelMap },
+      body: { salesChannels },
     },
     clients: { logistics },
   } = ctx
 
   const warehouses = await Promise.all(
-    Object.keys(salesChannelMap).map(currency =>
+    salesChannels?.map(({ currency }) =>
       logistics
         .createWarehouse({
           id: getLogisticsNaming(currency, true),
@@ -124,7 +124,7 @@ export const setupWarehouses = async (ctx: Context) => {
           warehouseDocks: [{ dockId: getLogisticsNaming(currency) }],
         })
         .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
-    )
+    ) ?? []
   )
 
   return incrementState(ctx, { warehouses })
