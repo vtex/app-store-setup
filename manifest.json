@@ -34,9 +34,6 @@
       "name": "vbase-read-write"
     },
     {
-      "name": "colossus-fire-event"
-    },
-    {
       "name": "colossus-write-logs"
     }
   ],
