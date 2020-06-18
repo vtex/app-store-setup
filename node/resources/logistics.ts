@@ -48,30 +48,40 @@ export const setupCarriers = async (ctx: Context) => {
     clients: { logistics },
   } = ctx
 
+  const createCarrierAndFreightValue = async (currency: string) => {
+    const name = getLogisticsNaming(currency)
+    const id = getLogisticsNaming(currency, true)
+
+    await logistics
+      .createCarrier({
+        id,
+        name,
+        slaType: getLogisticsNaming(currency),
+      })
+      .then(_ =>
+        logistics.createFreightValues(id, [
+          {
+            absoluteMoneyCost: '0',
+            country: currency === 'BRL' ? 'BRA' : 'USA',
+            maxVolume: 1000000000,
+            polygon: '',
+            pricePercent: 0,
+            pricePercentByWeight: 0,
+            timeCost: '0.00:00:00',
+            weightEnd: 100000,
+            weightStart: 0,
+            zipCodeEnd: '99999999',
+            zipCodeStart: '0',
+          },
+        ])
+      )
+
+    return { id, currency }
+  }
+
   const carriers = await Promise.all(
     salesChannels?.map(({ currency }) =>
-      logistics
-        .createCarrier({
-          freightValue: [
-            {
-              absoluteMoneyCost: '0',
-              country: currency === 'BRL' ? 'BRA' : 'USA',
-              maxVolume: 1000000000,
-              polygon: '',
-              pricePercent: 0,
-              pricePercentByWeight: 0,
-              timeCost: '0.00:00:00',
-              weightEnd: 100000,
-              weightStart: 0,
-              zipCodeEnd: '99999999',
-              zipCodeStart: '0',
-            },
-          ],
-          id: getLogisticsNaming(currency, true),
-          name: getLogisticsNaming(currency),
-          slaType: getLogisticsNaming(currency),
-        })
-        .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
+      createCarrierAndFreightValue(currency)
     ) ?? []
   )
 

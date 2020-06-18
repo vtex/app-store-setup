@@ -11,7 +11,6 @@ interface CarrierInput {
   maxRangeDelivery?: number
   dayOfWeekForDelivery?: DayOfWeekDelivery[] | null
   dayOfWeekBlockeds?: string[]
-  freightValue?: FreightValue[]
   factorCubicWeight?: string | null
   freightTableProcessStatus?: number
   freightTableValueError?: string | null

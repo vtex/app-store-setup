@@ -7,12 +7,26 @@ const routes = {
   carriers: () => `${routes.configuration()}/carriers`,
   configuration: () => `pvt/configuration`,
   docks: () => `${routes.configuration()}/docks`,
+  freight: (carrierId: string) =>
+    `${routes.configuration()}/freights/${carrierId}/values/update`,
   warehouses: () => `${routes.configuration()}/warehouses`,
 }
 
 export default class Logistics extends VtexCommerce {
   constructor(ctx: IOContext, options?: InstanceOptions) {
     super(ctx, 'logistics', options)
+  }
+
+  public createFreightValues(
+    carrierId: string,
+    freightBody: FreightValue[],
+    tracingConfig?: RequestTracingConfig
+  ) {
+    const metric = 'logistics-createFreightValues'
+    return this.http.post(routes.freight(carrierId), freightBody, {
+      metric,
+      tracing: createTracing(metric, tracingConfig),
+    })
   }
 
   public createCarrier(
@@ -25,7 +39,6 @@ export default class Logistics extends VtexCommerce {
       dayOfWeekForDelivery = null,
       dayOfWeekBlockeds = [],
       factorCubicWeight = null,
-      freightValue = [],
       freightTableProcessStatus = 1,
       freightTableValueError = null,
       modals = [],
@@ -58,7 +71,6 @@ export default class Logistics extends VtexCommerce {
         factorCubicWeight,
         freightTableProcessStatus,
         freightTableValueError,
-        freightValue,
         id,
         isPolygon,
         maxDimension,
