@@ -24,7 +24,7 @@
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "api.vtex.com",
+        "host": "api.vtexcommercestable.com.br",
         "path": "*"
       }
     },

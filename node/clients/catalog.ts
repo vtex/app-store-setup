@@ -1,18 +1,29 @@
-import { InstanceOptions, IOContext, RequestTracingConfig } from '@vtex/api'
+import {
+  InstanceOptions,
+  IOContext,
+  JanusClient,
+  RequestTracingConfig,
+} from '@vtex/api'
 
 import { createTracing } from '../utils/tracing'
-import VtexCommerce from './vtexcommerce'
 
 const routes = {
-  brand: () => `pvt/brand`,
-  category: () => `pvt/category`,
-  specification: () => `pvt/specification`,
-  specificationGroup: () => `pvt/specificationgroup`,
+  base: () => 'catalog',
+  brand: () => `${routes.base()}/pvt/brand`,
+  category: () => `${routes.base()}/pvt/category`,
+  specification: () => `${routes.base()}/pvt/specification`,
+  specificationGroup: () => `${routes.base()}/pvt/specificationgroup`,
 }
 
-export default class Catalog extends VtexCommerce {
+export default class Catalog extends JanusClient {
   constructor(ctx: IOContext, options?: InstanceOptions) {
-    super(ctx, 'catalog', options)
+    super(ctx, {
+      ...options,
+      headers: {
+        VtexIdclientAutCookie: ctx.authToken,
+        ...options?.headers,
+      },
+    })
   }
 
   public createBrand(

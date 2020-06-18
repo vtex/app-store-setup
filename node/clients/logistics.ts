@@ -1,20 +1,31 @@
-import { InstanceOptions, IOContext, RequestTracingConfig } from '@vtex/api'
+import {
+  InstanceOptions,
+  IOContext,
+  JanusClient,
+  RequestTracingConfig,
+} from '@vtex/api'
 
 import { createTracing } from '../utils/tracing'
-import VtexCommerce from './vtexcommerce'
 
 const routes = {
+  base: () => `logistics/`,
   carriers: () => `${routes.configuration()}/carriers`,
-  configuration: () => `pvt/configuration`,
+  configuration: () => `${routes.base()}/pvt/configuration`,
   docks: () => `${routes.configuration()}/docks`,
   freight: (carrierId: string) =>
     `${routes.configuration()}/freights/${carrierId}/values/update`,
   warehouses: () => `${routes.configuration()}/warehouses`,
 }
 
-export default class Logistics extends VtexCommerce {
+export default class Logistics extends JanusClient {
   constructor(ctx: IOContext, options?: InstanceOptions) {
-    super(ctx, 'logistics', options)
+    super(ctx, {
+      ...options,
+      headers: {
+        VtexIdclientAutCookie: ctx.authToken,
+        ...options?.headers,
+      },
+    })
   }
 
   public createFreightValues(

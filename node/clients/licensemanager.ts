@@ -1,15 +1,26 @@
-import { InstanceOptions, IOContext, RequestTracingConfig } from '@vtex/api'
+import {
+  InstanceOptions,
+  IOContext,
+  JanusClient,
+  RequestTracingConfig,
+} from '@vtex/api'
 
 import { createTracing } from '../utils/tracing'
-import VtexCommerce from './vtexcommerce'
 
 const routes = {
-  account: () => `account`,
+  account: () => `${routes.base()}/account`,
+  base: () => `license-manager`,
 }
 
-export default class Logistics extends VtexCommerce {
+export default class Logistics extends JanusClient {
   constructor(ctx: IOContext, options?: InstanceOptions) {
-    super(ctx, 'license-manager', options)
+    super(ctx, {
+      ...options,
+      headers: {
+        VtexIdclientAutCookie: ctx.authToken,
+        ...options?.headers,
+      },
+    })
   }
 
   public getAccountInfo(tracingConfig?: RequestTracingConfig) {
