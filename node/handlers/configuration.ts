@@ -1,4 +1,4 @@
-import { fetchConfiguration } from '../resources/configuration'
+import { fetchConfiguration } from '../middlewares/configuration'
 
 export async function configuration(ctx: Context) {
   ctx.body = await fetchConfiguration(ctx)

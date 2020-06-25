@@ -8,7 +8,19 @@ import {
 
 import { Clients } from './clients'
 import { configuration } from './handlers/configuration'
-import { setup } from './handlers/setup'
+import {
+  createBrand,
+  createCategory,
+  createSpecificationGroup,
+  createSpecifications,
+} from './middlewares/catalog'
+import { storeInVbase } from './middlewares/configuration'
+import {
+  setupCarriers,
+  setupDocks,
+  setupWarehouses,
+} from './middlewares/logistics'
+import { prepare } from './middlewares/prepare'
 
 const TIMEOUT_MS = 10000
 
@@ -37,6 +49,16 @@ export default new Service<Clients, RecorderState, ParamsContext>({
   clients,
   routes: {
     configuration,
-    setup,
+    setup: [
+      prepare,
+      createBrand,
+      createCategory,
+      createSpecificationGroup,
+      createSpecifications,
+      setupCarriers,
+      setupDocks,
+      setupWarehouses,
+      storeInVbase,
+    ],
   },
 })

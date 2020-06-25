@@ -24,7 +24,14 @@
     {
       "name": "outbound-access",
       "attrs": {
-        "host": "api.vtexcommercestable.com.br",
+        "host": "portal.vtexcommercestable.com.br",
+        "path": "*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
         "path": "*"
       }
     },

@@ -40,7 +40,7 @@ const getDefaultAddress = (currency: string) => {
   return DEFAULT_ADDRESSES[currency as keyof typeof DEFAULT_ADDRESSES]
 }
 
-export const setupCarriers = async (ctx: Context) => {
+export async function setupCarriers(ctx: Context, next: () => Promise<any>) {
   const {
     state: {
       body: { salesChannels },
@@ -85,10 +85,11 @@ export const setupCarriers = async (ctx: Context) => {
     ) ?? []
   )
 
-  return incrementState(ctx, { carriers })
+  incrementState(ctx, { carriers })
+  next()
 }
 
-export const setupDocks = async (ctx: Context) => {
+export async function setupDocks(ctx: Context, next: () => Promise<any>) {
   const {
     state: {
       body: { salesChannels },
@@ -112,10 +113,11 @@ export const setupDocks = async (ctx: Context) => {
     ) ?? []
   )
 
-  return incrementState(ctx, { docks })
+  incrementState(ctx, { docks })
+  next()
 }
 
-export const setupWarehouses = async (ctx: Context) => {
+export async function setupWarehouses(ctx: Context, next: () => Promise<any>) {
   const {
     state: {
       body: { salesChannels },
@@ -135,5 +137,6 @@ export const setupWarehouses = async (ctx: Context) => {
     ) ?? []
   )
 
-  return incrementState(ctx, { warehouses })
+  incrementState(ctx, { warehouses })
+  next()
 }

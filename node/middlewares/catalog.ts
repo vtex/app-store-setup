@@ -3,7 +3,7 @@ import incrementState from '../utils/incrementState'
 
 const SPECIFICATION_GROUP_NAME = 'AppsSpecifications'
 
-export const createBrand = async (ctx: Context) => {
+export async function createBrand(ctx: Context, next: () => Promise<any>) {
   const {
     clients: { lm, catalog },
     vtex: { account },
@@ -19,10 +19,11 @@ export const createBrand = async (ctx: Context) => {
     })
     .then(({ Id }) => Id)
 
-  return incrementState(ctx, { brandId })
+  incrementState(ctx, { brandId })
+  next()
 }
 
-export const createCategory = async (ctx: Context) => {
+export async function createCategory(ctx: Context, next: () => Promise<any>) {
   const {
     clients: { catalog },
   } = ctx
@@ -41,10 +42,14 @@ export const createCategory = async (ctx: Context) => {
     })
     .then(({ Id }) => Id)
 
-  return incrementState(ctx, { categoryId })
+  incrementState(ctx, { categoryId })
+  next()
 }
 
-export const createSpecificationGroup = async (ctx: Context) => {
+export async function createSpecificationGroup(
+  ctx: Context,
+  next: () => Promise<any>
+) {
   const {
     clients: { catalog },
     state: {
@@ -58,10 +63,14 @@ export const createSpecificationGroup = async (ctx: Context) => {
     Position: 1,
   })
 
-  return incrementState(ctx, { specificationGroupId })
+  incrementState(ctx, { specificationGroupId })
+  next()
 }
 
-export const createSpecifications = async (ctx: Context) => {
+export async function createSpecifications(
+  ctx: Context,
+  next: () => Promise<any>
+) {
   const {
     clients: { catalog },
     state: {
@@ -81,5 +90,6 @@ export const createSpecifications = async (ctx: Context) => {
     )
   )
 
-  return incrementState(ctx, { specifications })
+  incrementState(ctx, { specifications })
+  next()
 }

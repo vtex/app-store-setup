@@ -1,9 +1,8 @@
 import { json } from 'co-body'
 
-import { setupPipe } from '../resources/setupPipe'
 import { BRL_SALES_CHANNEL_ID } from '../utils/constants'
 
-export async function setup(ctx: Context) {
+export async function prepare(ctx: Context, next: () => Promise<any>) {
   const { salesChannels } = (await json(ctx.req)) as ChannelRequest
 
   ctx.state.body = {
@@ -15,13 +14,8 @@ export async function setup(ctx: Context) {
     })),
   }
 
-  setupPipe(ctx).catch(error =>
-    ctx.vtex.logger.error({
-      data: error.stack,
-      type: 'setup-failed',
-    })
-  )
-
   ctx.status = 200
   ctx.body = 'Setup started'
+
+  next()
 }

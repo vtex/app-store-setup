@@ -9,7 +9,7 @@ import { createTracing } from '../utils/tracing'
 
 const routes = {
   account: () => `${routes.base()}/account`,
-  base: () => `license-manager`,
+  base: () => `api/license-manager`,
 }
 
 export default class Logistics extends JanusClient {
