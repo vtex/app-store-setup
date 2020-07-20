@@ -77,22 +77,21 @@ export async function createSpecifications(
     },
   } = ctx
 
-  const {
-    productSpecifications: targetSpecifications,
-  } = await appStoreSellers.getSpecifications()
+  const targetSpecifications = await appStoreSellers.getSpecifications()
 
   const specifications = await Promise.all(
-    targetSpecifications.map((specification, index) =>
+    targetSpecifications.map(({ name, isRequired }, index) =>
       catalog
         .createSpecification({
           CategoryId: categoryId as number,
           DefaultValue: '',
-          Description: specification,
+          Description: name,
           FieldGroupId: specificationGroupId as number,
-          Name: specification,
+          IsRequired: isRequired,
+          Name: name,
           Position: index,
         })
-        .then(({ Id, Name }) => ({ name: Name, id: Id }))
+        .then(({ Id, Name }) => ({ id: Id, name: Name }))
     )
   )
 

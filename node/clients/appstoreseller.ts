@@ -10,10 +10,11 @@ export default class AppStoreSeller extends AppClient {
   }
 
   public async getSpecifications() {
-    return this.http.get<TargetSpecifications>('_v/catalog-specifications')
+    return this.http.get<TargetSpecifications[]>('_v/catalog-specifications')
   }
 }
 
 interface TargetSpecifications {
-  productSpecifications: string[]
+  name: string
+  isRequired: boolean
 }
