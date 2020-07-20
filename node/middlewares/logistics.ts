@@ -85,7 +85,7 @@ export async function setupCarriers(ctx: Context, next: () => Promise<any>) {
     ) ?? []
   )
 
-  incrementState(ctx, { carriers })
+  incrementState(ctx, { carriers }, 'carriers')
   next()
 }
 
@@ -113,7 +113,7 @@ export async function setupDocks(ctx: Context, next: () => Promise<any>) {
     ) ?? []
   )
 
-  incrementState(ctx, { docks })
+  incrementState(ctx, { docks }, 'docks')
   next()
 }
 
@@ -131,12 +131,12 @@ export async function setupWarehouses(ctx: Context, next: () => Promise<any>) {
         .createWarehouse({
           id: getLogisticsNaming(currency, true),
           name: getLogisticsNaming(currency),
-          warehouseDocks: [{ dockId: getLogisticsNaming(currency) }],
+          warehouseDocks: [{ dockId: getLogisticsNaming(currency, true) }],
         })
         .then(_ => ({ id: getLogisticsNaming(currency, true), currency }))
     ) ?? []
   )
 
-  incrementState(ctx, { warehouses })
+  incrementState(ctx, { warehouses }, 'warehouses')
   next()
 }

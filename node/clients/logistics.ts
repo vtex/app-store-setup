@@ -8,7 +8,7 @@ import {
 import { createTracing } from '../utils/tracing'
 
 const routes = {
-  base: () => `api/logistics/`,
+  base: () => `api/logistics`,
   carriers: () => `${routes.configuration()}/carriers`,
   configuration: () => `${routes.base()}/pvt/configuration`,
   docks: () => `${routes.configuration()}/docks`,

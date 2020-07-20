@@ -1,4 +1,3 @@
-import { DEFAULT_SPECIFICATIONS } from '../utils/constants'
 import incrementState from '../utils/incrementState'
 
 const SPECIFICATION_GROUP_NAME = 'AppsSpecifications'
@@ -19,7 +18,7 @@ export async function createBrand(ctx: Context, next: () => Promise<any>) {
     })
     .then(({ Id }) => Id)
 
-  incrementState(ctx, { brandId })
+  incrementState(ctx, { brandId }, 'brand')
   next()
 }
 
@@ -42,7 +41,7 @@ export async function createCategory(ctx: Context, next: () => Promise<any>) {
     })
     .then(({ Id }) => Id)
 
-  incrementState(ctx, { categoryId })
+  incrementState(ctx, { categoryId }, 'category')
   next()
 }
 
@@ -63,7 +62,7 @@ export async function createSpecificationGroup(
     Position: 1,
   })
 
-  incrementState(ctx, { specificationGroupId })
+  incrementState(ctx, { specificationGroupId }, 'specificationGroup')
   next()
 }
 
@@ -72,24 +71,31 @@ export async function createSpecifications(
   next: () => Promise<any>
 ) {
   const {
-    clients: { catalog },
+    clients: { appStoreSellers, catalog },
     state: {
       body: { categoryId, specificationGroupId },
     },
   } = ctx
 
+  const {
+    productSpecifications: targetSpecifications,
+  } = await appStoreSellers.getSpecifications()
+
   const specifications = await Promise.all(
-    DEFAULT_SPECIFICATIONS.map(specification =>
+    targetSpecifications.map((specification, index) =>
       catalog
         .createSpecification({
-          ...specification,
           CategoryId: categoryId as number,
+          DefaultValue: '',
+          Description: specification,
           FieldGroupId: specificationGroupId as number,
+          Name: specification,
+          Position: index,
         })
         .then(({ Id, Name }) => ({ name: Name, id: Id }))
     )
   )
 
-  incrementState(ctx, { specifications })
+  incrementState(ctx, { specifications }, 'specifications')
   next()
 }

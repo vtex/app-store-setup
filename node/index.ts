@@ -4,6 +4,7 @@ import {
   RecorderState,
   Service,
   ServiceContext,
+  method,
 } from '@vtex/api'
 
 import { Clients } from './clients'
@@ -48,7 +49,9 @@ declare global {
 export default new Service<Clients, RecorderState, ParamsContext>({
   clients,
   routes: {
-    configuration,
+    configuration: method({
+      GET: configuration,
+    }),
     setup: [
       prepare,
       createBrand,
