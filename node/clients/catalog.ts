@@ -8,6 +8,7 @@ import {
 import { createTracing } from '../utils/tracing'
 
 const routes = {
+  attachments: () => `${routes.base()}/pvt/attachment`,
   base: () => 'api/catalog',
   brand: () => `${routes.base()}/pvt/brand`,
   category: () => `${routes.base()}/pvt/category`,
@@ -164,6 +165,31 @@ export default class Catalog extends JanusClient {
         IsWizard,
         Name,
         Position,
+      },
+      {
+        metric,
+        tracing: createTracing(metric, tracingConfig),
+      }
+    )
+  }
+
+  public createAttachment(
+    {
+      Name,
+      IsRequired,
+      IsActive,
+      Domains,
+    }: AttachmentInput,
+    tracingConfig?: RequestTracingConfig
+  ) {
+    const metric = 'catalog-createAttachment'
+    return this.http.post<Attachment>(
+      routes.attachments(),
+      {
+        Domains,
+        IsActive,
+        IsRequired,
+        Name,
       },
       {
         metric,

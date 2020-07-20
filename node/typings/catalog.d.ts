@@ -66,3 +66,20 @@ interface SpecificationInput {
 interface Specification extends SpecificationInput {
   Id: number
 }
+
+interface AttachmentInput {
+  Name: string
+  IsRequired: boolean
+  IsActive: boolean
+  Domains: AttachmentDomain[]
+}
+
+interface AttachmentDomain {
+  FieldName: string
+  MaxCaracters: string
+  DomainValues: string
+}
+
+interface Attachment extends AttachmentInput {
+  Id: number
+}
