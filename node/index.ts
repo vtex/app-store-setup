@@ -14,6 +14,7 @@ import {
   createCategory,
   createSpecificationGroup,
   createSpecifications,
+  createAttachments,
 } from './middlewares/catalog'
 import { storeInVbase } from './middlewares/configuration'
 import {
@@ -58,6 +59,7 @@ export default new Service<Clients, RecorderState, ParamsContext>({
       createCategory,
       createSpecificationGroup,
       createSpecifications,
+      createAttachments,
       setupCarriers,
       setupDocks,
       setupWarehouses,
