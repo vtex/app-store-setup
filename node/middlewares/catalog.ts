@@ -99,22 +99,27 @@ export async function createSpecifications(
   next()
 }
 
-export async function createAttachments(ctx: Context, next: () => Promise<any>) {
+export async function createAttachments(
+  ctx: Context,
+  next: () => Promise<any>
+) {
   const {
     clients: { catalog },
   } = ctx
 
   const { Id } = await catalog.createAttachment({
-    Domains: [{
-      DomainValues: '1 mês',
-      FieldName: 'Período',
-      MaxCaracters: '',
-    }],
+    Domains: [
+      {
+        DomainValues: '1 mês',
+        FieldName: 'Período',
+        MaxCaracters: '',
+      },
+    ],
     IsActive: true,
     IsRequired: true,
     Name: 'Recorrência',
   })
 
-  incrementState(ctx, { attachments: [Id] })
+  incrementState(ctx, { attachments: [Id] }, 'attachments')
   next()
 }
